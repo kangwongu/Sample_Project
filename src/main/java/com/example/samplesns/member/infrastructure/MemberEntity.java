@@ -1,6 +1,7 @@
 package com.example.samplesns.member.infrastructure;
 
 import com.example.samplesns.common.Timestamp;
+import com.example.samplesns.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,15 @@ public class MemberEntity extends Timestamp {
     private String email;
     private String nickname;
     private LocalDate birthday;
+
+    public Member toModel() {
+        return Member.builder()
+                .id(id)
+                .email(email)
+                .nickname(nickname)
+                .birthday(birthday)
+                .createDate(getCreateDate())
+                .modifyDate(getModifyDate())
+                .build();
+    }
 }
