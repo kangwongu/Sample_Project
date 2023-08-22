@@ -38,3 +38,4 @@ out/
 
 # yml
 jwt.yml
+mail.yml
