@@ -18,4 +18,9 @@ public class MemberRepositoryImpl implements MemberRepository {
         return memberJpaRepository.findByEmail(email)
                 .map(memberEntity -> memberEntity.toModel());
     }
+
+    @Override
+    public Member save(Member member) {
+        return memberJpaRepository.save(MemberEntity.fromModel(member)).toModel();
+    }
 }
