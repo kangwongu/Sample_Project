@@ -50,8 +50,6 @@ public class Member {
                 .birthday(request.getBirthday())
                 .certificationCode(certificationCode)
                 .status(MemberStatus.PENDING)
-                .createDate(LocalDateTime.now())
-                .modifyDate(LocalDateTime.now())
                 .build();
     }
 }

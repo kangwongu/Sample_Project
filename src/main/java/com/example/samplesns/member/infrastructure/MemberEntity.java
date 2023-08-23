@@ -6,13 +6,11 @@ import com.example.samplesns.member.domain.MemberStatus;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEntity extends Timestamp {
 
@@ -24,6 +22,8 @@ public class MemberEntity extends Timestamp {
     private String nickname;
     private LocalDate birthday;
     private String certificationCode;
+
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     public static MemberEntity fromModel(Member member) {
