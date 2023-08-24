@@ -42,6 +42,9 @@ dependencies {
     // p6spy
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.springdoc:springdoc-openapi-security:1.7.0'
 }
 
 tasks.named('test') {
