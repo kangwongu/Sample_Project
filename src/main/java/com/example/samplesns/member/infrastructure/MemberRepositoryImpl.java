@@ -20,6 +20,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findById(long memberId) {
+        return memberJpaRepository.findById(memberId)
+                .map(memberEntity -> memberEntity.toModel());
+    }
+
+    @Override
     public Member save(Member member) {
         return memberJpaRepository.save(MemberEntity.fromModel(member)).toModel();
     }

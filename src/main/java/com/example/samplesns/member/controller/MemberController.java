@@ -6,10 +6,9 @@ import com.example.samplesns.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +22,15 @@ public class MemberController {
         Member member = memberService.register(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(member);
+    }
+
+    @GetMapping("/{id}/verify")
+    public ResponseEntity<Void> verifyEmail(@PathVariable long id,
+                                            @RequestParam String certificationCode) {
+        memberService.verifyEmail(id, certificationCode);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("http://localhost:3000"))  // 가상의 프론트 서버
+                .build();
     }
 
 }

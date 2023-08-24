@@ -44,4 +44,15 @@ public class MemberService {
         return member;
     }
 
+    // 인증
+    @Transactional
+    public void verifyEmail(long memberId, String certificationCode) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않아요"));
+
+        member = member.verify(certificationCode);
+        /* 도메인 모델과 영속성 객체 분리 -> JPA의 변경감지 사용 x */
+        memberRepository.save(member);
+    }
+
 }

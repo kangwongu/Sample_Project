@@ -52,4 +52,21 @@ public class Member {
                 .status(MemberStatus.PENDING)
                 .build();
     }
+
+    public Member verify(String certificationCode) {
+        if (!this.certificationCode.equals(certificationCode)) {
+            throw new IllegalStateException("잘못된 인증코드입니다");
+        }
+
+        return Member.builder()
+                .id(id)
+                .email(email)
+                .password(password)
+                .nickname(nickname)
+                .birthday(birthday)
+                .certificationCode(certificationCode)
+                .status(MemberStatus.ACTIVE)
+                .modifyDate(LocalDateTime.now())
+                .build();
+    }
 }
