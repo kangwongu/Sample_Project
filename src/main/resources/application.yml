@@ -14,3 +14,21 @@ spring:
 
   config:
     import: jwt.yml, mail.yml
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-custom-ui.html
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    enabled: true
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  model-and-view-allowed: true
+  packages-to-scan: com.example.samplesns
+
+
+
