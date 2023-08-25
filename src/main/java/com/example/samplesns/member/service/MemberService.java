@@ -3,6 +3,8 @@ package com.example.samplesns.member.service;
 import com.example.samplesns.common.util.RandomCodeCreator;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.dto.RegisterRequest;
+import com.example.samplesns.member.exception.MemberException;
+import com.example.samplesns.member.exception.status.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,14 +24,14 @@ public class MemberService {
     @Transactional
     public Member register(RegisterRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalStateException("중복된 이메일이 존재");
+            throw new MemberException(MemberStatus.DUPLICATED_MEMBER);
         }
 
         String password1 = request.getPassword1();
         String password2 = request.getPassword2();
 
         if (!password1.equals(password2)) {
-            throw new IllegalStateException("비밀번호 일치 x");
+            throw new MemberException(MemberStatus.NOT_CORRECT_PASSWORD);
         }
 
         String encodedPassword = passwordEncoder.encode(password1);
@@ -48,7 +50,7 @@ public class MemberService {
     @Transactional
     public void verifyEmail(long memberId, String certificationCode) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NullPointerException("해당 회원이 존재하지 않아요"));
+                .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
 
         member = member.verify(certificationCode);
         /* 도메인 모델과 영속성 객체 분리 -> JPA의 변경감지 사용 x */

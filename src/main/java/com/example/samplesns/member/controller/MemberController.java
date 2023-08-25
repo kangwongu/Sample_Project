@@ -1,5 +1,6 @@
 package com.example.samplesns.member.controller;
 
+import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.dto.RegisterRequest;
 import com.example.samplesns.member.service.MemberService;
@@ -32,7 +33,8 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공",
                 content = {@Content(schema = @Schema(implementation = Member.class))}),
-            @ApiResponse(responseCode = "400", description = "비밀번호 불일치"),
+            @ApiResponse(responseCode = "400", description = "비밀번호 불일치",
+                content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))}),
             @ApiResponse(responseCode = "409", description = "중복된 이메일 존재")
     })
     public ResponseEntity<Member> register(@RequestBody @Valid RegisterRequest request) {
