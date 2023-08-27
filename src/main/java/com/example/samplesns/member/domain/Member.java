@@ -1,6 +1,7 @@
 package com.example.samplesns.member.domain;
 
 import com.example.samplesns.member.dto.RegisterRequest;
+import com.example.samplesns.member.exception.MemberException;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.Assert;
@@ -55,7 +56,7 @@ public class Member {
 
     public Member verify(String certificationCode) {
         if (!this.certificationCode.equals(certificationCode)) {
-            throw new IllegalStateException("잘못된 인증코드입니다");
+            throw new MemberException(com.example.samplesns.member.exception.status.MemberStatus.NOT_VALID_CERTIFICATION_CODE);
         }
 
         return Member.builder()
