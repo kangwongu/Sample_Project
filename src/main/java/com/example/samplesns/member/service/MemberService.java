@@ -6,7 +6,6 @@ import com.example.samplesns.member.dto.RegisterRequest;
 import com.example.samplesns.member.exception.MemberException;
 import com.example.samplesns.member.exception.status.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
-import com.example.samplesns.member.service.port.MyPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +26,7 @@ public class MemberService {
             throw new MemberException(MemberStatus.DUPLICATED_MEMBER);
         }
 
-        String password1 = request.getPassword1();
-        String password2 = request.getPassword2();
-
-        if (!password1.equals(password2)) {
-            throw new MemberException(MemberStatus.NOT_CORRECT_PASSWORD);
-        }
-
-        String encodedPassword = passwordService.encode(password1);
+        String encodedPassword = passwordService.encode(request.getPassword1(), request.getPassword2());
         RandomCodeCreator randomCodeCreator = new RandomCodeCreator();
         String certificationCode = randomCodeCreator.getRandomCode(10);
 
