@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final MyPasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
     private final CertificationService certificationService;
     private final MemberRepository memberRepository;
 
@@ -34,7 +34,7 @@ public class MemberService {
             throw new MemberException(MemberStatus.NOT_CORRECT_PASSWORD);
         }
 
-        String encodedPassword = passwordEncoder.encode(password1);
+        String encodedPassword = passwordService.encode(password1);
         RandomCodeCreator randomCodeCreator = new RandomCodeCreator();
         String certificationCode = randomCodeCreator.getRandomCode(10);
 
