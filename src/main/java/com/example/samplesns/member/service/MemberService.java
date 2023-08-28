@@ -6,8 +6,8 @@ import com.example.samplesns.member.dto.RegisterRequest;
 import com.example.samplesns.member.exception.MemberException;
 import com.example.samplesns.member.exception.status.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
+import com.example.samplesns.member.service.port.MyPasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final PasswordEncoder passwordEncoder;
+    private final MyPasswordEncoder passwordEncoder;
     private final CertificationService certificationService;
     private final MemberRepository memberRepository;
 
@@ -43,7 +43,7 @@ public class MemberService {
 
         certificationService.send(savedMember.getEmail(), savedMember.getId(), savedMember.getCertificationCode());
 
-        return member;
+        return savedMember;
     }
 
     // 인증
