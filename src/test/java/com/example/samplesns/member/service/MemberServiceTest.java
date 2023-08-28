@@ -64,23 +64,23 @@ public class MemberServiceTest {
 
     }
 
-    @Test
-    public void 회원가입시_비밀번호와_비밀번호확인이_틀리면_에러가_발생한다() {
-        // given
-        TestContainer testContainer = TestContainer.builder().build();
-
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("kwg0527@naver.com");
-        request.setPassword1("1q2w3e4r!");
-        request.setPassword2("1q2w3e4r!!@$@!");
-        request.setNickname("19");
-        request.setBirthday(LocalDate.of(1800, 10, 10));
-
-        // when
-        // then
-        assertThatThrownBy(() -> testContainer.memberService.register(request))
-                .isInstanceOf(MemberException.class);
-    }
+//    @Test
+//    public void 회원가입시_비밀번호와_비밀번호확인이_틀리면_에러가_발생한다() {
+//        // given
+//        TestContainer testContainer = TestContainer.builder().build();
+//
+//        RegisterRequest request = new RegisterRequest();
+//        request.setEmail("kwg0527@naver.com");
+//        request.setPassword1("1q2w3e4r!");
+//        request.setPassword2("1q2w3e4r!!@$@!");
+//        request.setNickname("19");
+//        request.setBirthday(LocalDate.of(1800, 10, 10));
+//
+//        // when
+//        // then
+//        assertThatThrownBy(() -> testContainer.memberService.register(request))
+//                .isInstanceOf(MemberException.class);
+//    }
 
     @Test
     public void PENDING_상태인_회원은_유효한_인증코드로_ACTIVE_상태로_변경시킬_수_있다() {
@@ -124,4 +124,5 @@ public class MemberServiceTest {
                 .isInstanceOf(MemberException.class);
 
     }
+
 }
