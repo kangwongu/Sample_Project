@@ -1,6 +1,7 @@
 package com.example.samplesns.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -8,7 +9,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Schema(description = "회원가입 포맷")
-@Getter
+@Data
 public class RegisterRequest {
     @Email
     @NotBlank

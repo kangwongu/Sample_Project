@@ -7,7 +7,6 @@ import com.example.samplesns.member.exception.MemberException;
 import com.example.samplesns.member.exception.status.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
     private final CertificationService certificationService;
     private final MemberRepository memberRepository;
 
@@ -27,14 +26,7 @@ public class MemberService {
             throw new MemberException(MemberStatus.DUPLICATED_MEMBER);
         }
 
-        String password1 = request.getPassword1();
-        String password2 = request.getPassword2();
-
-        if (!password1.equals(password2)) {
-            throw new MemberException(MemberStatus.NOT_CORRECT_PASSWORD);
-        }
-
-        String encodedPassword = passwordEncoder.encode(password1);
+        String encodedPassword = passwordService.encode(request.getPassword1(), request.getPassword2());
         RandomCodeCreator randomCodeCreator = new RandomCodeCreator();
         String certificationCode = randomCodeCreator.getRandomCode(10);
 
@@ -43,7 +35,7 @@ public class MemberService {
 
         certificationService.send(savedMember.getEmail(), savedMember.getId(), savedMember.getCertificationCode());
 
-        return member;
+        return savedMember;
     }
 
     // 인증
