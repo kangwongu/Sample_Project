@@ -20,4 +20,12 @@ public class PasswordService {
         return passwordEncoder.encode(password1);
     }
 
+    public boolean matches(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new MemberException(MemberStatus.NOT_CORRECT_PASSWORD);
+        }
+
+        return true;
+    }
+
 }
