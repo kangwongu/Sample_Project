@@ -2,6 +2,7 @@ package com.example.samplesns.member.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.member.domain.Member;
+import com.example.samplesns.member.dto.LoginRequest;
 import com.example.samplesns.member.dto.RegisterRequest;
 import com.example.samplesns.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,4 +68,16 @@ public class MemberController {
                 .build();
     }
 
+    @PostMapping("/login")
+    @Operation(summary = "로그인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "400", description = "비밀번호 불일치"),
+            @ApiResponse(responseCode = "404", description = "해당 email의 회원 존재 x")
+    })
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest request) {
+        HttpHeaders response = memberService.login(request);
+
+        return ResponseEntity.ok().headers(response).build();
+    }
 }
