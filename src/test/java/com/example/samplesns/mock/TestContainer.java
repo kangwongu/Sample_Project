@@ -1,5 +1,6 @@
 package com.example.samplesns.mock;
 
+import com.example.samplesns.common.service.port.JwtManager;
 import com.example.samplesns.member.service.CertificationService;
 import com.example.samplesns.member.service.MemberService;
 import com.example.samplesns.member.service.PasswordService;
@@ -14,17 +15,15 @@ public class TestContainer {
     public PasswordService passwordService;
     public CertificationService certificationService;
     public MemberRepository memberRepository;
-    public MyPasswordEncoder myPasswordEncoder;
     public MailSender mailSender;
 
     @Builder
-    public TestContainer() {
+    public TestContainer(MyPasswordEncoder passwordEncoder, JwtManager jwtManager) {
         this.mailSender = new FakeMailSender();
-        this.myPasswordEncoder = new FakePasswordEncoder();
         this.memberRepository = new FakeMemberRepository();
         this.certificationService = new CertificationService(mailSender);
-        this.passwordService = new PasswordService(myPasswordEncoder);
-        this.memberService = new MemberService(passwordService, certificationService, memberRepository);
+        this.passwordService = new PasswordService(passwordEncoder);
+        this.memberService = new MemberService(passwordService, certificationService, memberRepository, jwtManager);
     }
 
 }
