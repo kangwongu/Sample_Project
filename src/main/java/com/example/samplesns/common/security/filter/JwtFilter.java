@@ -1,6 +1,6 @@
 package com.example.samplesns.common.security.filter;
 
-import com.example.samplesns.common.jwt.JwtManager;
+import com.example.samplesns.common.service.port.JwtManager;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
