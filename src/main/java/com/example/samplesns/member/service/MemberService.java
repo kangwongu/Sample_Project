@@ -1,6 +1,7 @@
 package com.example.samplesns.member.service;
 
-import com.example.samplesns.common.jwt.JwtManager;
+import com.example.samplesns.common.infrastructure.jwt.SystemJwtManager;
+import com.example.samplesns.common.service.port.JwtManager;
 import com.example.samplesns.common.util.RandomCodeCreator;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.dto.LoginRequest;

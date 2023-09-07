@@ -1,6 +1,7 @@
-package com.example.samplesns.common.jwt;
+package com.example.samplesns.common.infrastructure.jwt;
 
 import com.example.samplesns.common.security.userdetails.UserDetailsServiceImpl;
+import com.example.samplesns.common.service.port.JwtManager;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -21,10 +22,7 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class JwtManager {
-
-    public static final String HEADER_STRING = "Authorization";
-    public static final String TOKEN_PREFIX = "Bearer ";
+public class SystemJwtManager implements JwtManager {
 
     public final int ACCESS_EXPIRATION_TIME;
     public final BigInteger REFRESH_EXPIRATION_TIME;
@@ -32,10 +30,10 @@ public class JwtManager {
     private Key key;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtManager(@Value("${spring.jwt.access-expiration-time}") int ACCESS_EXPIRATION_TIME,
-                      @Value("${spring.jwt.refresh-expiration-time}") BigInteger REFRESH_EXPIRATION_TIME,
-                      @Value("${spring.jwt.secret-key}") String SECRET_KEY,
-                      UserDetailsServiceImpl userDetailsService) {
+    public SystemJwtManager(@Value("${spring.jwt.access-expiration-time}") int ACCESS_EXPIRATION_TIME,
+                            @Value("${spring.jwt.refresh-expiration-time}") BigInteger REFRESH_EXPIRATION_TIME,
+                            @Value("${spring.jwt.secret-key}") String SECRET_KEY,
+                            UserDetailsServiceImpl userDetailsService) {
         this.ACCESS_EXPIRATION_TIME = ACCESS_EXPIRATION_TIME * 60;
         this.REFRESH_EXPIRATION_TIME = REFRESH_EXPIRATION_TIME;
         this.SECRET_KEY = SECRET_KEY;
