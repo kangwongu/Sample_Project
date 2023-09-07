@@ -1,19 +1,20 @@
 package com.example.samplesns.mock;
 
 import com.example.samplesns.member.service.port.MyPasswordEncoder;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class FakePasswordEncoder implements MyPasswordEncoder {
 
-    public String password;
+    public final String encodeString;
 
     @Override
     public String encode(String rawPassword) {
-        password = "encoded! " + rawPassword;
-        return password;
+        return encodeString + rawPassword;
     }
 
     @Override
     public boolean matches(String rawPassword, String encodedPassword) {
-        return false;
+        return (encodedPassword).equals(encodeString+rawPassword);
     }
 }
