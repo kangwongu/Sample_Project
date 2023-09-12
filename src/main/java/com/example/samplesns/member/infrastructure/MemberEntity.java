@@ -26,7 +26,7 @@ public class MemberEntity extends Timestamp {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    public static MemberEntity fromModel(Member member) {
+    public static MemberEntity from(Member member) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.id = member.getId();
         memberEntity.email = member.getEmail();
