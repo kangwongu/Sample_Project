@@ -17,11 +17,11 @@ public class FollowEntity extends CreateTimestamp {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "from_member_id")
+    @JoinColumn(name = "from_member_id")
     private MemberEntity fromMember;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "to_member_id")
+    @JoinColumn(name = "to_member_id")
     private MemberEntity toMember;
 
     public static FollowEntity from(Follow follow) {
