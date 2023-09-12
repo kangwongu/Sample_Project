@@ -12,6 +12,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private final Member member;
 
+    public Member getMember() {
+        return member;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -24,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return member.getEmail();
     }
 
     @Override
