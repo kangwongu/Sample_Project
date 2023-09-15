@@ -9,6 +9,7 @@ import com.example.samplesns.member.exception.status.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class FollowService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
+    @Transactional
     public void follow(Member fromMember, FollowRequest request) {
 //        Member fromMember = memberRepository.findById(fromMemberId)
 //                .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
