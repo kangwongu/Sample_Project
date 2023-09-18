@@ -132,7 +132,38 @@ public class MemberServiceTest {
     }
 
     @Test
-    public void 유효한_이메일과_비밀번호로_로그인할_수_있고_Jwt토큰을_반환한다() {
+    public void ACTIVE_상태인_계정은_유효한_이메일과_비밀번호로_로그인할_수_있고_Jwt토큰을_반환한다() {
+        // given
+        FakePasswordEncoder passwordEncoder = new FakePasswordEncoder("encode");
+
+        TestContainer testContainer = TestContainer.builder()
+                .passwordEncoder(passwordEncoder)
+                .jwtManager(new FakeJwtManager("jwt"))
+                .build();
+
+        testContainer.memberRepository.save(Member.builder()
+                .id(1L)
+                .email("kwg2358@gmail.com")
+                .password(passwordEncoder.encode("1q2w3e4r!@#$"))
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setEmail("kwg2358@gmail.com");
+        loginRequest.setPassword("1q2w3e4r!@#$");
+
+        // when
+        HttpHeaders result = testContainer.memberService.login(loginRequest);
+
+        // then
+        assertThat(result.get(JwtManager.HEADER_STRING).get(0)).isEqualTo("Bearer kwg2358@gmail.comjwt");
+    }
+
+    @Test
+    public void PENDING_상태의_계정은_유효한_이메일과_비밀번호로도_로그인할_수_없다() {
         // given
         FakePasswordEncoder passwordEncoder = new FakePasswordEncoder("encode");
 
@@ -156,10 +187,9 @@ public class MemberServiceTest {
         loginRequest.setPassword("1q2w3e4r!@#$");
 
         // when
-        HttpHeaders result = testContainer.memberService.login(loginRequest);
+        assertThatThrownBy(() -> testContainer.memberService.login(loginRequest)
+            ).isInstanceOf(MemberException.class);
 
-        // then
-        assertThat(result.get(JwtManager.HEADER_STRING).get(0)).isEqualTo("Bearer kwg2358@gmail.comjwt");
     }
 
     @Test

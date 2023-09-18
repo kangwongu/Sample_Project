@@ -23,4 +23,12 @@ public class Follow {
         this.createDate = createDate;
     }
 
+    public static Follow of(Member fromMember, Member toMember) {
+        return Follow.builder()
+                .fromMember(fromMember)
+                .toMember(toMember)
+                .createDate(LocalDateTime.now())
+                .build();
+    }
+
 }

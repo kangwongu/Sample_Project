@@ -47,6 +47,7 @@ public class SystemJwtManager implements JwtManager {
     }
 
     // AccessToken 생성
+    @Override
     public String generateAccessToken(String email) {
         return TOKEN_PREFIX + Jwts.builder()
                 .setSubject(email)
@@ -56,6 +57,7 @@ public class SystemJwtManager implements JwtManager {
     }
 
     // AccessToken 정보 추출
+    @Override
     public String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (StringUtils.hasText(token) && token.startsWith(TOKEN_PREFIX)) {
@@ -66,12 +68,18 @@ public class SystemJwtManager implements JwtManager {
     }
 
     // 토큰 검증
+    @Override
     public Boolean validateToken(String token) {
         return !Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody().isEmpty();
     }
 
+    @Override
     public Authentication createAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmailFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, null, null);
+    }
+
+    public String getUserEmailFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody().getSubject();
     }
 }
