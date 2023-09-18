@@ -20,10 +20,7 @@ public class FollowService {
 
     @Transactional
     public void follow(Member fromMember, FollowRequest request) {
-//        Member fromMember = memberRepository.findById(fromMemberId)
-//                .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
-
-        Member toMember = memberRepository.findByEmail(request.getEmail())
+        Member toMember = memberRepository.findByEmailAndStatus(request.getEmail(), com.example.samplesns.member.domain.MemberStatus.ACTIVE)
                 .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
 
         Follow follow = Follow.of(fromMember, toMember);
