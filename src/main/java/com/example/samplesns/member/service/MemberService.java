@@ -58,7 +58,7 @@ public class MemberService {
 
     // 로그인
     public HttpHeaders login(LoginRequest request) {
-        Member member = memberRepository.findByEmail(request.getEmail())
+        Member member = memberRepository.findByEmailAndStatus(request.getEmail(), com.example.samplesns.member.domain.MemberStatus.ACTIVE)
                 .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
         passwordService.matches(request.getPassword(), member.getPassword());
 
