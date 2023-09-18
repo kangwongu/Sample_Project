@@ -1,6 +1,7 @@
 package com.example.samplesns.member.infrastructure;
 
 import com.example.samplesns.member.domain.Member;
+import com.example.samplesns.member.domain.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,11 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Member save(Member member) {
         return memberJpaRepository.save(MemberEntity.from(member)).toModel();
     }
+
+    @Override
+    public Optional<Member> findByEmailAndStatus(String email, MemberStatus status) {
+        return memberJpaRepository.findByEmailAndStatus(email, status)
+                .map(memberEntity -> memberEntity.toModel());
+    }
+
 }
