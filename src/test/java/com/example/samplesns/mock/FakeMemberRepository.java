@@ -1,6 +1,7 @@
 package com.example.samplesns.mock;
 
 import com.example.samplesns.member.domain.Member;
+import com.example.samplesns.member.domain.MemberStatus;
 import com.example.samplesns.member.service.port.MemberRepository;
 
 import java.util.ArrayList;
@@ -44,5 +45,10 @@ public class FakeMemberRepository implements MemberRepository {
             data.add(member);
             return member;
         }
+    }
+
+    @Override
+    public Optional<Member> findByEmailAndStatus(String email, MemberStatus status) {
+        return data.stream().filter(d -> d.getEmail().equals(email) && d.getStatus().equals(status)).findAny();
     }
 }
