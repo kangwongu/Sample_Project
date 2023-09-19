@@ -145,4 +145,28 @@ class FollowServiceTest {
         assertThat(followingMembers.get(0).getEmail()).isEqualTo("kwg0527@naver.com");
         assertThat(followingMembers.get(1).getEmail()).isEqualTo("kwg0527@aimeelabs.com");
     }
+
+    @Test
+    public void 로그인한_회원을_팔로우중인_회원이_없으면_빈_리스트를_반환한다() {
+        // given
+        Member fromMember = Member.builder()
+                .id(1L)
+                .email("kwg2358@gmail.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        TestContainer testContainer = TestContainer.builder().build();
+        testContainer.memberRepository.save(fromMember);
+
+        // when
+        List<MemberResponse> followingMembers = testContainer.followService.getFollowingMembers(fromMember);
+
+        // then
+        assertThat(followingMembers).isNotNull();
+        assertThat(followingMembers.size()).isEqualTo(0);
+    }
 }
