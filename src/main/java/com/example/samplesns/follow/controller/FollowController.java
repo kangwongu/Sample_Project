@@ -4,6 +4,7 @@ import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
 import com.example.samplesns.follow.dto.FollowRequest;
 import com.example.samplesns.follow.service.FollowService;
+import com.example.samplesns.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,12 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "Follow", description = "Follow API")
 @RestController
@@ -43,4 +42,10 @@ public class FollowController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<MemberResponse>> getFollowingMembers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<MemberResponse> response = followService.getFollowingMembers(userDetails.getMember());
+
+        return ResponseEntity.ok().body(response);
+    }
 }
