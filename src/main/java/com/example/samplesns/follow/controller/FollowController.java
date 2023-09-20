@@ -6,6 +6,7 @@ import com.example.samplesns.follow.dto.FollowRequest;
 import com.example.samplesns.follow.service.FollowService;
 import com.example.samplesns.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,6 +44,9 @@ public class FollowController {
     }
 
     @GetMapping("/list")
+    @Operation(summary = "팔로잉 조회", description = "현재 로그인한 회원을 팔로잉하는 회원의 정보 조회")
+    @ApiResponse(responseCode = "200", description = "팔로잉 조회 성공",
+            content = {@Content(array = @ArraySchema(schema = @Schema(implementation = MemberResponse.class)))})
     public ResponseEntity<List<MemberResponse>> getFollowingMembers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<MemberResponse> response = followService.getFollowingMembers(userDetails.getMember());
 
