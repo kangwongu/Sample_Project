@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
@@ -20,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("")
-    public ResponseEntity<Void> createPost(@RequestBody PostCreateRequest request,
+    public ResponseEntity<Void> createPost(@RequestBody @Valid PostCreateRequest request,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.createPost(userDetails.getMember(), request);
 

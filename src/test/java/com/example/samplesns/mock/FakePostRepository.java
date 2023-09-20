@@ -1,6 +1,8 @@
 package com.example.samplesns.mock;
 
 import com.example.samplesns.post.domain.Post;
+import com.example.samplesns.post.exception.PostException;
+import com.example.samplesns.post.exception.status.PostStatus;
 import com.example.samplesns.post.service.port.PostRepository;
 
 import java.util.ArrayList;
@@ -36,6 +38,6 @@ public class FakePostRepository implements PostRepository {
     @Override
     public Post getById(long postId) {
         return data.stream().filter(d -> d.getId().equals(postId)).findAny()
-                .orElseThrow(() -> new RuntimeException("NO POST"));
+                .orElseThrow(() -> new PostException(PostStatus.NOT_EXIST_POST));
     }
 }
