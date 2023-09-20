@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class FakeMemberRepository implements MemberRepository {
 
@@ -50,5 +51,10 @@ public class FakeMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByEmailAndStatus(String email, MemberStatus status) {
         return data.stream().filter(d -> d.getEmail().equals(email) && d.getStatus().equals(status)).findAny();
+    }
+
+    @Override
+    public List<Member> findAllByIds(List<Long> memberIds) {
+        return data.stream().filter(d -> memberIds.contains(d.getId())).collect(Collectors.toList());
     }
 }

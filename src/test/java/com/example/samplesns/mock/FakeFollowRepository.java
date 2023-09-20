@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class FakeFollowRepository implements FollowRepository {
 
@@ -33,5 +34,10 @@ public class FakeFollowRepository implements FollowRepository {
 
     public Optional<Follow> findById(long followId) {
         return data.stream().filter(d -> d.getId().equals(followId)).findAny();
+    }
+
+    @Override
+    public List<Follow> findAllByfromMemberId(long fromMemberId) {
+        return data.stream().filter(d -> d.getFromMember().getId().equals(fromMemberId)).collect(Collectors.toList());
     }
 }

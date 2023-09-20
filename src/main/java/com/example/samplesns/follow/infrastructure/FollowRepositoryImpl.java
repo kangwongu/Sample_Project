@@ -5,7 +5,9 @@ import com.example.samplesns.follow.service.port.FollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,5 +24,13 @@ public class FollowRepositoryImpl implements FollowRepository {
     public Optional<Follow> findById(long followId) {
         return followJpaRepository.findById(followId)
                 .map(followEntity -> followEntity.toModel());
+    }
+
+    @Override
+    public List<Follow> findAllByfromMemberId(long fromMemberId) {
+        return followJpaRepository.findAllByFromMemberId(fromMemberId)
+                .stream()
+                .map(followEntity -> followEntity.toModel())
+                .collect(Collectors.toList());
     }
 }

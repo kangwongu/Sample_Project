@@ -6,7 +6,9 @@ import com.example.samplesns.member.service.port.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,6 +37,14 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Optional<Member> findByEmailAndStatus(String email, MemberStatus status) {
         return memberJpaRepository.findByEmailAndStatus(email, status)
                 .map(memberEntity -> memberEntity.toModel());
+    }
+
+    @Override
+    public List<Member> findAllByIds(List<Long> memberIds) {
+        return memberJpaRepository.findAllByIdIn(memberIds)
+                .stream()
+                .map(memberEntity -> memberEntity.toModel())
+                .collect(Collectors.toList());
     }
 
 }
