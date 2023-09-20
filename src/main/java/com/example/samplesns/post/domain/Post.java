@@ -26,4 +26,12 @@ public class Post {
         this.createDate = createDate;
         this.modifyDate = modifyDate;
     }
+
+    public static Post from(Member fromMember, String title, String contents) {
+        return Post.builder()
+                .member(fromMember)
+                .title(title)
+                .contents(contents)
+                .build();
+    }
 }
