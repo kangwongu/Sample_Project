@@ -61,6 +61,11 @@ public class PostController {
     }
 
     @GetMapping("/my-list")
+    @Operation(summary = "자신이 작성한 게시글 목록 조회", description = "현재 로그인한 회원이 작성한 게시글 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PostResponse.class)))})
+    })
     public ResponseEntity<Slice<PostResponse>> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                           Pageable pageable) {
         Slice<PostResponse> response = postService.getMyPosts(userDetails.getMember(), pageable);
