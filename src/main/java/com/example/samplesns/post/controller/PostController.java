@@ -5,6 +5,7 @@ import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
 import com.example.samplesns.post.dto.DailyPostRequest;
 import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.dto.PostCreateRequest;
+import com.example.samplesns.post.dto.PostResponse;
 import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -55,6 +56,14 @@ public class PostController {
                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                   Pageable pageable) {
         Slice<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request, pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/my-list")
+    public ResponseEntity<Slice<PostResponse>> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                          Pageable pageable) {
+        Slice<PostResponse> response = postService.getMyPosts(userDetails.getMember(), pageable);
 
         return ResponseEntity.ok().body(response);
     }

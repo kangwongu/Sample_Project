@@ -20,4 +20,7 @@ public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
                                                @Param("firstDate") Date firstDate,
                                                @Param("lastDate") Date lastDate,
                                                Pageable pageable);
+
+    Slice<PostEntity> findAllByMemberIdOrderByCreateDateDesc(long memberId, Pageable pageable);
+
 }

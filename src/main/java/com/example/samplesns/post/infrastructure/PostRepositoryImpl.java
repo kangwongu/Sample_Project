@@ -33,4 +33,10 @@ public class PostRepositoryImpl implements PostRepository {
     public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
         return postJpaRepository.groupByCreateDate(memberId, Date.valueOf(firstDate), Date.valueOf(lastDate), pageable);
     }
+
+    @Override
+    public Slice<Post> getMyPosts(long memberId, Pageable pageable) {
+        return postJpaRepository.findAllByMemberIdOrderByCreateDateDesc(memberId, pageable)
+                .map(postEntity -> postEntity.toModel());
+    }
 }
