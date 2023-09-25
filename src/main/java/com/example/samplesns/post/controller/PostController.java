@@ -7,6 +7,7 @@ import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.dto.PostCreateRequest;
 import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +22,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Tag(name = "Post", description = "Post API")
 @RestController
@@ -46,7 +46,12 @@ public class PostController {
     }
 
     @GetMapping("/daily-list")
-    public ResponseEntity<Slice<DailyPostResponse>> getDailyPosts(@ModelAttribute DailyPostRequest request,
+    @Operation(summary = "일자별 게시글 조회", description = "지정된 일자에 회원별 작성한 게시글의 개수 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+            content = {@Content(array = @ArraySchema(schema = @Schema(implementation = DailyPostResponse.class)))})
+    })
+    public ResponseEntity<Slice<DailyPostResponse>> getDailyPosts(@ModelAttribute @Valid DailyPostRequest request,
                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                   Pageable pageable) {
         Slice<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request, pageable);
