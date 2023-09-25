@@ -32,6 +32,8 @@ public class Post {
                 .member(fromMember)
                 .title(title)
                 .contents(contents)
+                .createDate(LocalDateTime.now())
+                .modifyDate(LocalDateTime.now())
                 .build();
     }
 }

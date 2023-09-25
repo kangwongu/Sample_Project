@@ -14,4 +14,6 @@ public interface PostRepository {
     Post getById(long postId);
 
     Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable);
+
+    Slice<Post> getMyPosts(long memberId, Pageable pageable);
 }
