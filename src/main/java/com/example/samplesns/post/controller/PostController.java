@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,9 +46,10 @@ public class PostController {
     }
 
     @GetMapping("/daily-list")
-    public ResponseEntity<List<DailyPostResponse>> getDailyPosts(@ModelAttribute DailyPostRequest request,
-                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request);
+    public ResponseEntity<Slice<DailyPostResponse>> getDailyPosts(@ModelAttribute DailyPostRequest request,
+                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  Pageable pageable) {
+        Slice<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request, pageable);
 
         return ResponseEntity.ok().body(response);
     }

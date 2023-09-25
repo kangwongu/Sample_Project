@@ -7,10 +7,10 @@ import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.dto.PostCreateRequest;
 import com.example.samplesns.post.service.port.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,8 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<DailyPostResponse> getDailyPosts(Member member, DailyPostRequest request) {
-        return postRepository.groupByCreateDate(member.getId(), request.getFirstDate(), request.getLastDate());
+    @Transactional(readOnly = true)
+    public Slice<DailyPostResponse> getDailyPosts(Member member, DailyPostRequest request, Pageable pageable) {
+        return postRepository.groupByCreateDate(member.getId(), request.getFirstDate(), request.getLastDate(), pageable);
     }
 }
