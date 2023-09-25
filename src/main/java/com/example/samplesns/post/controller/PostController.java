@@ -2,6 +2,8 @@ package com.example.samplesns.post.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
+import com.example.samplesns.post.dto.DailyPostRequest;
+import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.dto.PostCreateRequest;
 import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,12 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "Post", description = "Post API")
 @RestController
@@ -43,4 +43,11 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/daily-list")
+    public ResponseEntity<List<DailyPostResponse>> getDailyPosts(@ModelAttribute DailyPostRequest request,
+                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request);
+
+        return ResponseEntity.ok().body(response);
+    }
 }
