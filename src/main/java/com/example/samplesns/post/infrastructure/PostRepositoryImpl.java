@@ -35,8 +35,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Slice<Post> getMyPosts(long memberId, Pageable pageable) {
+    public Slice<Post> getMemberPosts(long memberId, Pageable pageable) {
         return postJpaRepository.findAllByMemberIdOrderByCreateDateDesc(memberId, pageable)
                 .map(postEntity -> postEntity.toModel());
     }
+
 }

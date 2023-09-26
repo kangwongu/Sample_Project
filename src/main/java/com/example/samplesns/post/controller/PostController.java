@@ -50,7 +50,7 @@ public class PostController {
     @Operation(summary = "일자별 게시글 조회", description = "지정된 일자에 회원별 작성한 게시글의 개수 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공",
-            content = {@Content(array = @ArraySchema(schema = @Schema(implementation = DailyPostResponse.class)))})
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = DailyPostResponse.class)))})
     })
     public ResponseEntity<Slice<DailyPostResponse>> getDailyPosts(@ModelAttribute @Valid DailyPostRequest request,
                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -69,6 +69,14 @@ public class PostController {
     public ResponseEntity<Slice<PostResponse>> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                           Pageable pageable) {
         Slice<PostResponse> response = postService.getMyPosts(userDetails.getMember(), pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Slice<PostResponse>> getPosts(@RequestParam String email,
+                                                        Pageable pageable) {
+        Slice<PostResponse> response = postService.getPosts(email, pageable);
 
         return ResponseEntity.ok().body(response);
     }

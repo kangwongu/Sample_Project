@@ -1,6 +1,7 @@
 package com.example.samplesns.post.service;
 
 import com.example.samplesns.member.domain.Member;
+import com.example.samplesns.member.service.port.MemberRepository;
 import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.DailyPostRequest;
 import com.example.samplesns.post.dto.DailyPostResponse;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void createPost(Member member, PostCreateRequest request) {
@@ -31,6 +33,12 @@ public class PostService {
     }
 
     public Slice<PostResponse> getMyPosts(Member member, Pageable pageable) {
-        return postRepository.getMyPosts(member.getId(), pageable).map(p -> PostResponse.from(p));
+        return postRepository.getMemberPosts(member.getId(), pageable).map(p -> PostResponse.from(p));
+    }
+
+    public Slice<PostResponse> getPosts(String email, Pageable pageable) {
+        Member findMember = memberRepository.getByEmail(email);
+
+        return postRepository.getMemberPosts(findMember.getId(), pageable).map(p -> PostResponse.from(p));
     }
 }
