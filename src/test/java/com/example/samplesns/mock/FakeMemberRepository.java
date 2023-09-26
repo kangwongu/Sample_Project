@@ -2,6 +2,7 @@ package com.example.samplesns.mock;
 
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.domain.MemberStatus;
+import com.example.samplesns.member.exception.MemberException;
 import com.example.samplesns.member.service.port.MemberRepository;
 
 import java.util.ArrayList;
@@ -20,6 +21,14 @@ public class FakeMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByEmail(String email) {
         return data.stream().filter(d -> d.getEmail().equals(email)).findAny();
+    }
+
+    @Override
+    public Member getByEmail(String email) {
+        return data.stream()
+                .filter(d -> d.getEmail().equals(email))
+                .findAny()
+                .orElseThrow(() -> new MemberException(com.example.samplesns.member.exception.status.MemberStatus.NOT_EXIST_MEMBER));
     }
 
     @Override

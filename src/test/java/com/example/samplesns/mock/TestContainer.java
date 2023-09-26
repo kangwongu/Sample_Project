@@ -36,7 +36,7 @@ public class TestContainer {
         this.followRepository = new FakeFollowRepository();
         this.followService = new FollowService(memberRepository, followRepository);
         this.postRepository = new FakePostRepository();
-        this.postService = new PostService(postRepository);
+        this.postService = new PostService(postRepository, memberRepository);
     }
 
 }

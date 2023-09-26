@@ -2,22 +2,25 @@ package com.example.samplesns.post.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
+import com.example.samplesns.post.dto.DailyPostRequest;
+import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.dto.PostCreateRequest;
+import com.example.samplesns.post.dto.PostResponse;
 import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -43,4 +46,38 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/daily-list")
+    @Operation(summary = "일자별 게시글 조회", description = "지정된 일자에 회원별 작성한 게시글의 개수 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = DailyPostResponse.class)))})
+    })
+    public ResponseEntity<Slice<DailyPostResponse>> getDailyPosts(@ModelAttribute @Valid DailyPostRequest request,
+                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  Pageable pageable) {
+        Slice<DailyPostResponse> response = postService.getDailyPosts(userDetails.getMember(), request, pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/my-list")
+    @Operation(summary = "자신이 작성한 게시글 목록 조회", description = "현재 로그인한 회원이 작성한 게시글 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PostResponse.class)))})
+    })
+    public ResponseEntity<Slice<PostResponse>> getMyPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                          Pageable pageable) {
+        Slice<PostResponse> response = postService.getMyPosts(userDetails.getMember(), pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Slice<PostResponse>> getPosts(@RequestParam String email,
+                                                        Pageable pageable) {
+        Slice<PostResponse> response = postService.getPosts(email, pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
 }
