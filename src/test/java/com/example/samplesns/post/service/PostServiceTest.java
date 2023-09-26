@@ -139,4 +139,91 @@ class PostServiceTest {
         assertThat(posts.getContent().get(1).getNickname()).isEqualTo("19");
         assertThat(posts.getContent().get(1).getCreateDate()).isEqualTo(post1.getCreateDate());
     }
+
+    @Test
+    public void 로그인한_회원은_특정_회원이_작성한_게시글_목록을_조회할_수_있다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member loginMember = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Member writer = Member.builder()
+                .id(2L)
+                .email("kwg2358@gmial.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+        testContainer.memberRepository.save(loginMember);
+        testContainer.memberRepository.save(writer);
+
+        Post post1 = Post.from(writer, "제목", "콘텐츠");
+        Post post2 = Post.from(writer, "제목2", "콘텐츠2");
+        testContainer.postRepository.save(post1);
+        testContainer.postRepository.save(post2);
+
+        // when
+        Slice<PostResponse> posts = testContainer.postService.getPosts(writer.getEmail(), PageRequest.of(0, 5));
+
+        // then
+        assertThat(posts.getContent().size()).isEqualTo(2);
+    }
+
+    @Test
+    public void 특정_회원의_게시글을_조회할_때_최신순으로_정렬해서_조회한다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member loginMember = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Member writer = Member.builder()
+                .id(2L)
+                .email("kwg2358@gmial.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+        testContainer.memberRepository.save(loginMember);
+        testContainer.memberRepository.save(writer);
+
+        Post post1 = Post.from(writer, "제목", "콘텐츠");
+        Post post2 = Post.from(writer, "제목2", "콘텐츠2");
+        testContainer.postRepository.save(post1);
+        testContainer.postRepository.save(post2);
+
+        // when
+        Slice<PostResponse> posts = testContainer.postService.getPosts(writer.getEmail(), PageRequest.of(0, 5));
+
+        // then
+        assertThat(posts.getContent().get(0).getTitle()).isEqualTo("제목2");
+        assertThat(posts.getContent().get(0).getContents()).isEqualTo("콘텐츠2");
+        assertThat(posts.getContent().get(0).getEmail()).isEqualTo("kwg2358@gmial.com");
+        assertThat(posts.getContent().get(0).getNickname()).isEqualTo("9");
+        assertThat(posts.getContent().get(0).getCreateDate()).isEqualTo(post2.getCreateDate());
+        assertThat(posts.getContent().get(1).getTitle()).isEqualTo("제목");
+        assertThat(posts.getContent().get(1).getContents()).isEqualTo("콘텐츠");
+        assertThat(posts.getContent().get(1).getEmail()).isEqualTo("kwg2358@gmial.com");
+        assertThat(posts.getContent().get(1).getNickname()).isEqualTo("9");
+        assertThat(posts.getContent().get(1).getCreateDate()).isEqualTo(post1.getCreateDate());
+    }
 }

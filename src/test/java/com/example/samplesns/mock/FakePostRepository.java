@@ -53,7 +53,7 @@ public class FakePostRepository implements PostRepository {
     }
 
     @Override
-    public Slice<Post> getMyPosts(long memberId, Pageable pageable) {
+    public Slice<Post> getMemberPosts(long memberId, Pageable pageable) {
         List<Post> posts = data.stream().filter(d -> d.getMember().getId().equals(memberId))
                 .sorted((d1, d2) -> d2.getCreateDate().compareTo(d1.getCreateDate()))
                 .collect(Collectors.toList());
@@ -66,4 +66,5 @@ public class FakePostRepository implements PostRepository {
 
         return new SliceImpl<>(posts, pageable, hasNext);
     }
+
 }
