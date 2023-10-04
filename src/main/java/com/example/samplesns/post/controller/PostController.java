@@ -2,10 +2,7 @@ package com.example.samplesns.post.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
-import com.example.samplesns.post.dto.DailyPostRequest;
-import com.example.samplesns.post.dto.DailyPostResponse;
-import com.example.samplesns.post.dto.PostCreateRequest;
-import com.example.samplesns.post.dto.PostResponse;
+import com.example.samplesns.post.dto.*;
 import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -87,5 +84,21 @@ public class PostController {
         Slice<PostResponse> response = postService.getPosts(email, pageable);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{postId}")
+    @Operation(summary = "게시글 수정", description = "자신의 게시글만 수정할 수 있다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 상태가 아님"),
+            @ApiResponse(responseCode = "403", description = "본인의 게시글이 아닌 게시글을 수정 시도함"),
+            @ApiResponse(responseCode = "404", description = "해당 게시글이 존재하지 않음")
+    })
+    public ResponseEntity<Void> updatePosts(@PathVariable long postId,
+                                            @RequestBody @Valid PostUpdateRequest request,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.updatePost(postId, userDetails.getMember(), request);
+
+        return ResponseEntity.ok().build();
     }
 }

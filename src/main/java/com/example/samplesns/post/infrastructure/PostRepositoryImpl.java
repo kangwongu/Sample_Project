@@ -31,7 +31,9 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getById(long postId) {
-        throw new PostException(PostStatus.NOT_EXIST_POST);
+        return postJpaRepository.findById(postId)
+                .map(postEntity -> postEntity.toModel())
+                .orElseThrow(() -> new PostException(PostStatus.NOT_EXIST_POST));
     }
 
     @Override
