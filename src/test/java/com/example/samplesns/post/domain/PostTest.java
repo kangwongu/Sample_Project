@@ -33,4 +33,30 @@ class PostTest {
         assertThat(post.getTitle()).isEqualTo("제목");
         assertThat(post.getContents()).isEqualTo("콘텐츠");
     }
+
+    @Test
+    public void 제목_콘텐츠로_Post_객체를_수정할_수_있다() {
+        // given
+        Post post = Post.builder()
+                .id(1L)
+                .member(Member.builder()
+                        .id(1L)
+                        .email("kwg2358@gmail.com")
+                        .password("1q2w3e4r!@#$")
+                        .nickname("9")
+                        .birthday(LocalDate.of(1800, 11, 11))
+                        .certificationCode("1q2w3e4r")
+                        .status(MemberStatus.ACTIVE)
+                        .build())
+                .title("제목이에요")
+                .contents("본문이에요")
+                .build();
+
+        // when
+        Post updatePost = post.update("제목", "본문");
+
+        // then
+        assertThat(updatePost.getTitle()).isEqualTo("제목");
+        assertThat(updatePost.getContents()).isEqualTo("본문");
+    }
 }

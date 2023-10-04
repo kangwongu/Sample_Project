@@ -6,6 +6,8 @@ import com.example.samplesns.mock.TestContainer;
 import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.PostCreateRequest;
 import com.example.samplesns.post.dto.PostResponse;
+import com.example.samplesns.post.dto.PostUpdateRequest;
+import com.example.samplesns.post.exception.PostException;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -225,5 +227,75 @@ class PostServiceTest {
         assertThat(posts.getContent().get(1).getEmail()).isEqualTo("kwg2358@gmial.com");
         assertThat(posts.getContent().get(1).getNickname()).isEqualTo("9");
         assertThat(posts.getContent().get(1).getCreateDate()).isEqualTo(post1.getCreateDate());
+    }
+
+    @Test
+    public void 로그인한_회원은_자신의_게시글을_수정할_수_있다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member member = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Post post1 = Post.from(member, "제목", "콘텐츠");
+        testContainer.postRepository.save(post1);
+
+        PostUpdateRequest request = new PostUpdateRequest();
+        request.setTitle("수정한 제목");
+        request.setContents("수정한 본문");
+
+        // when
+        testContainer.postService.updatePost(1L, member, request);
+
+        // then
+        assertThat(testContainer.postRepository.getById(1L).getTitle()).isEqualTo("수정한 제목");
+        assertThat(testContainer.postRepository.getById(1L).getContents()).isEqualTo("수정한 본문");
+        assertThat(testContainer.postRepository.getById(1L).getMember().getEmail()).isEqualTo("kwg0527@naver.com");
+    }
+
+    @Test
+    public void 자신의_게시글이_아닌_게시글은_수정할_수_없다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member member1 = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Member member2 = Member.builder()
+                .id(2L)
+                .email("kwg2358@gmail.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Post post1 = Post.from(member1, "제목", "콘텐츠");
+        testContainer.postRepository.save(post1);
+
+        PostUpdateRequest request = new PostUpdateRequest();
+        request.setTitle("수정한 제목");
+        request.setContents("수정한 본문");
+
+        // when
+        // then
+        assertThatThrownBy(() -> testContainer.postService.updatePost(1L, member2, request))
+                .isInstanceOf(PostException.class);
+
     }
 }
