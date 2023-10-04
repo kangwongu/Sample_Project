@@ -1,6 +1,7 @@
 package com.example.samplesns.post.infrastructure;
 
 import com.example.samplesns.common.Timestamp;
+import com.example.samplesns.common.util.BooleanToYNConverter;
 import com.example.samplesns.member.infrastructure.MemberEntity;
 import com.example.samplesns.post.domain.Post;
 import lombok.AccessLevel;
@@ -24,12 +25,16 @@ public class PostEntity extends Timestamp {
 
     private String contents;
 
+    @Convert(converter = BooleanToYNConverter.class)
+    private Boolean isDelete;
+
     public static PostEntity from(Post post) {
         PostEntity postEntity = new PostEntity();
         postEntity.id = post.getId();
         postEntity.member = MemberEntity.from(post.getMember());
         postEntity.title = post.getTitle();
         postEntity.contents = post.getContents();
+        postEntity.isDelete = post.getIsDelete();
 
         return postEntity;
     }
@@ -40,6 +45,7 @@ public class PostEntity extends Timestamp {
                 .member(member.toModel())
                 .title(title)
                 .contents(contents)
+                .isDelete(isDelete)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();

@@ -29,6 +29,7 @@ public class FakePostRepository implements PostRepository {
                     .member(post.getMember())
                     .title(post.getTitle())
                     .contents(post.getContents())
+                    .isDelete(post.getIsDelete())
                     .createDate(post.getCreateDate())
                     .modifyDate(post.getModifyDate())
                     .build();

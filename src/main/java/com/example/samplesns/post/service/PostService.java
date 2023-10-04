@@ -52,4 +52,16 @@ public class PostService {
         Post updatePost = findPost.update(request.getTitle(), request.getContents());
         postRepository.save(updatePost);
     }
+
+    @Transactional
+    public void deletePost(long postId, Member member) {
+        Post findPost = postRepository.getById(postId);
+
+        if (!findPost.isValid(member.getId())) {
+            throw new PostException(PostStatus.NOT_VALID_PERMISSION);
+        }
+
+        Post deletePost = findPost.delete();
+        postRepository.save(deletePost);
+    }
 }
