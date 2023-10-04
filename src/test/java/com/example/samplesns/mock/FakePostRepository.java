@@ -67,4 +67,9 @@ public class FakePostRepository implements PostRepository {
         return new SliceImpl<>(posts, pageable, hasNext);
     }
 
+//    @Override
+//    public void saveAllByBulk(long memberId, List<Post> posts) {
+//
+//    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PostRepository {
 
@@ -17,4 +18,5 @@ public interface PostRepository {
 
     Slice<Post> getMemberPosts(long memberId, Pageable pageable);
 
+//    void saveAllByBulk(long memberId, List<Post> posts);
 }

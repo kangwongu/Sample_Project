@@ -8,16 +8,21 @@ import com.example.samplesns.post.service.port.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostJpaRepository postJpaRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Post save(Post post) {
@@ -39,5 +44,22 @@ public class PostRepositoryImpl implements PostRepository {
         return postJpaRepository.findAllByMemberIdOrderByCreateDateDesc(memberId, pageable)
                 .map(postEntity -> postEntity.toModel());
     }
+
+//    @Override
+//    public void saveAllByBulk(long memberId, List<Post> posts) {
+//        String sql = "INSERT INTO post (member_id, title, contents, create_date, modify_date) " +
+//                "VALUES (?, ?, ?, ?, ?)";
+//
+//        jdbcTemplate.batchUpdate(sql,
+//                posts,
+//                posts.size(),
+//                (PreparedStatement ps, Post p) -> {
+//                    ps.setLong(1, memberId);
+//                    ps.setString(2, p.getTitle());
+//                    ps.setString(3, p.getContents());
+//                    ps.setTimestamp(4, Timestamp.valueOf(p.getCreateDate()));
+//                    ps.setTimestamp(5, Timestamp.valueOf(p.getCreateDate()));
+//                });
+//    }
 
 }
