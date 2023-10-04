@@ -36,4 +36,20 @@ public class Post {
                 .modifyDate(LocalDateTime.now())
                 .build();
     }
+
+    public boolean isValid(long memberId) {
+        return member.getId().equals(memberId);
+    }
+
+    public Post update(String title, String contents) {
+        return Post.builder()
+                .id(id)
+                .member(member)
+                .title(title)
+                .contents(contents)
+                .createDate(getCreateDate())
+                .modifyDate(getModifyDate())
+                .build();
+    }
+
 }

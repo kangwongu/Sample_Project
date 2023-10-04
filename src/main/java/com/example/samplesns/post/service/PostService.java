@@ -3,10 +3,9 @@ package com.example.samplesns.post.service;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.service.port.MemberRepository;
 import com.example.samplesns.post.domain.Post;
-import com.example.samplesns.post.dto.DailyPostRequest;
-import com.example.samplesns.post.dto.DailyPostResponse;
-import com.example.samplesns.post.dto.PostCreateRequest;
-import com.example.samplesns.post.dto.PostResponse;
+import com.example.samplesns.post.dto.*;
+import com.example.samplesns.post.exception.PostException;
+import com.example.samplesns.post.exception.status.PostStatus;
 import com.example.samplesns.post.service.port.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -40,5 +39,17 @@ public class PostService {
         Member findMember = memberRepository.getByEmail(email);
 
         return postRepository.getMemberPosts(findMember.getId(), pageable).map(p -> PostResponse.from(p));
+    }
+
+    @Transactional
+    public void updatePost(long postId, Member member, PostUpdateRequest request) {
+        Post findPost = postRepository.getById(postId);
+
+        if (!findPost.isValid(member.getId())) {
+            throw new PostException(PostStatus.NOT_VALID_PERMISSION);
+        }
+
+        Post updatePost = findPost.update(request.getTitle(), request.getContents());
+        postRepository.save(updatePost);
     }
 }
