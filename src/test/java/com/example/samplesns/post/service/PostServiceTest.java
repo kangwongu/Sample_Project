@@ -298,4 +298,66 @@ class PostServiceTest {
                 .isInstanceOf(PostException.class);
 
     }
+
+    @Test
+    public void 로그인한_회원은_자신의_게시글을_삭제할_수_있다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member member = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Post post1 = Post.from(member, "제목", "콘텐츠");
+        testContainer.postRepository.save(post1);
+
+        // when
+        testContainer.postService.deletePost(1L, member);
+
+        // then
+        assertThat(testContainer.postRepository.getById(1L).getIsDelete()).isTrue();
+        assertThat(testContainer.postRepository.getById(1L).getTitle()).isEqualTo("제목");
+        assertThat(testContainer.postRepository.getById(1L).getContents()).isEqualTo("콘텐츠");
+    }
+
+    @Test
+    public void 자신의_게시글이_아닌_게시글은_삭제_처리할_수_없다() {
+        // given
+        TestContainer testContainer = TestContainer.builder().build();
+
+        Member member1 = Member.builder()
+                .id(1L)
+                .email("kwg0527@naver.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("19")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Member member2 = Member.builder()
+                .id(2L)
+                .email("kwg2358@gmail.com")
+                .password("1q2w3e4r!@#$")
+                .nickname("9")
+                .birthday(LocalDate.of(1800, 11, 11))
+                .certificationCode("1q2w3e4r")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        Post post1 = Post.from(member1, "제목", "콘텐츠");
+        testContainer.postRepository.save(post1);
+
+        // when
+        // then
+        assertThatThrownBy(() -> testContainer.postService.deletePost(1L, member2))
+                .isInstanceOf(PostException.class);
+    }
+
 }
