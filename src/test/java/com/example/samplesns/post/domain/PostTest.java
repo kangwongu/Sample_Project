@@ -52,6 +52,7 @@ class PostTest {
                         .build())
                 .title("제목이에요")
                 .contents("본문이에요")
+                .isDelete(false)
                 .build();
 
         // when
@@ -78,6 +79,7 @@ class PostTest {
                         .build())
                 .title("제목이에요")
                 .contents("본문이에요")
+                .isDelete(false)
                 .build();
 
         // when

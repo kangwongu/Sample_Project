@@ -26,7 +26,7 @@ public class Post {
         this.member = Objects.requireNonNull(member);
         this.title = Objects.requireNonNull(title);
         this.contents = Objects.requireNonNull(contents);
-        this.isDelete = isDelete;
+        this.isDelete = Objects.requireNonNull(isDelete);
         this.createDate = createDate;
         this.modifyDate = modifyDate;
     }
