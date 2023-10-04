@@ -90,14 +90,35 @@ public class PostController {
     @Operation(summary = "게시글 수정", description = "자신의 게시글만 수정할 수 있다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "수정 성공"),
-            @ApiResponse(responseCode = "401", description = "로그인 상태가 아님"),
-            @ApiResponse(responseCode = "403", description = "본인의 게시글이 아닌 게시글을 수정 시도함"),
-            @ApiResponse(responseCode = "404", description = "해당 게시글이 존재하지 않음")
+            @ApiResponse(responseCode = "401", description = "로그인 상태가 아님",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "403", description = "본인의 게시글이 아닌 게시글을 수정 시도함",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "해당 게시글이 존재하지 않음",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))})
     })
     public ResponseEntity<Void> updatePosts(@PathVariable long postId,
                                             @RequestBody @Valid PostUpdateRequest request,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.updatePost(postId, userDetails.getMember(), request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{postId}/delete")
+    @Operation(summary = "게시글 수정", description = "자신의 게시글만 수정할 수 있다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 상태가 아님",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "403", description = "본인의 게시글이 아닌 게시글을 삭제 시도함",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "해당 게시글이 존재하지 않음",
+                    content = {@Content(schema = @Schema(implementation = ExceptionResponse.class))})
+    })
+    public ResponseEntity<Void> deletePosts(@PathVariable long postId,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getMember());
 
         return ResponseEntity.ok().build();
     }
