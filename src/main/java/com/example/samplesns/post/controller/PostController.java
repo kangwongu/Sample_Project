@@ -106,7 +106,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}/delete")
-    @Operation(summary = "게시글 수정", description = "자신의 게시글만 수정할 수 있다")
+    @Operation(summary = "게시글 삭제", description = "자신의 게시글만 삭제할 수 있다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 상태가 아님",
