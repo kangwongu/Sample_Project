@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.util.List;
 
 public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
 
@@ -22,5 +23,7 @@ public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
                                                Pageable pageable);
 
     Slice<PostEntity> findAllByMemberIdOrderByCreateDateDesc(long memberId, Pageable pageable);
+
+    Slice<PostEntity> findAllByMemberIdInOrderByCreateDateDesc(List<Long> memberIds, Pageable pageable);
 
 }

@@ -18,5 +18,7 @@ public interface PostRepository {
 
     Slice<Post> getMemberPosts(long memberId, Pageable pageable);
 
+    Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable);
+
 //    void saveAllByBulk(long memberId, List<Post> posts);
 }

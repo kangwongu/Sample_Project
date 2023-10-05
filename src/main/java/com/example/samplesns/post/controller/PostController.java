@@ -4,6 +4,7 @@ import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
 import com.example.samplesns.post.dto.*;
 import com.example.samplesns.post.service.PostService;
+import com.example.samplesns.post.service.TimelineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 public class PostController {
 
     private final PostService postService;
+    private final TimelineService timelineService;
 
     @PostMapping("")
     @Operation(summary = "게시글 등록")
@@ -121,5 +123,18 @@ public class PostController {
         postService.deletePost(postId, userDetails.getMember());
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "타임라인(홈) 조회", description = "자신이 팔로우한 회원들의 게시글 시간순 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PostResponse.class)))})
+    })
+    public ResponseEntity<Slice<PostResponse>> getTimelines(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                          Pageable pageable) {
+        Slice<PostResponse> response = timelineService.getTimelines(userDetails.getMember(), pageable);
+
+        return ResponseEntity.ok().body(response);
     }
 }

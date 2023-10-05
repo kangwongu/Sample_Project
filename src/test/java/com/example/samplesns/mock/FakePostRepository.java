@@ -68,6 +68,11 @@ public class FakePostRepository implements PostRepository {
         return new SliceImpl<>(posts, pageable, hasNext);
     }
 
+    @Override
+    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
+        return null;
+    }
+
 //    @Override
 //    public void saveAllByBulk(long memberId, List<Post> posts) {
 //

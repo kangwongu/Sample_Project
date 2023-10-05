@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,6 +42,12 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Slice<Post> getMemberPosts(long memberId, Pageable pageable) {
         return postJpaRepository.findAllByMemberIdOrderByCreateDateDesc(memberId, pageable)
+                .map(postEntity -> postEntity.toModel());
+    }
+
+    @Override
+    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
+        return postJpaRepository.findAllByMemberIdInOrderByCreateDateDesc(memberIds, pageable)
                 .map(postEntity -> postEntity.toModel());
     }
 
