@@ -33,4 +33,12 @@ public class FollowRepositoryImpl implements FollowRepository {
                 .map(followEntity -> followEntity.toModel())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Follow> findAllByToMemberId(long toMemberId) {
+        return followJpaRepository.findAllByToMemberId(toMemberId)
+                .stream()
+                .map(followEntity -> followEntity.toModel())
+                .collect(Collectors.toList());
+    }
 }

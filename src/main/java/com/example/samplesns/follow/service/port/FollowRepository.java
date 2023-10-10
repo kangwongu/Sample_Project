@@ -12,4 +12,6 @@ public interface FollowRepository {
     Optional<Follow> findById(long followId);
 
     List<Follow> findAllByfromMemberId(long fromMemberId);
+
+    List<Follow> findAllByToMemberId(long toMemberId);
 }

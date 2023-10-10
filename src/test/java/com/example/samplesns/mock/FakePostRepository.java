@@ -49,6 +49,11 @@ public class FakePostRepository implements PostRepository {
     }
 
     @Override
+    public Slice<Post> findAllByIds(List<Long> postIds, Pageable pageable) {
+        return null;
+    }
+
+    @Override
     public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
         return null;
     }
@@ -68,10 +73,10 @@ public class FakePostRepository implements PostRepository {
         return new SliceImpl<>(posts, pageable, hasNext);
     }
 
-    @Override
-    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
-        return null;
-    }
+//    @Override
+//    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
+//        return null;
+//    }
 
 //    @Override
 //    public void saveAllByBulk(long memberId, List<Post> posts) {

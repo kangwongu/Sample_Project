@@ -40,4 +40,9 @@ public class FakeFollowRepository implements FollowRepository {
     public List<Follow> findAllByfromMemberId(long fromMemberId) {
         return data.stream().filter(d -> d.getFromMember().getId().equals(fromMemberId)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Follow> findAllByToMemberId(long toMemberId) {
+        return data.stream().filter(d -> d.getToMember().getId().equals(toMemberId)).collect(Collectors.toList());
+    }
 }

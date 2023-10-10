@@ -31,6 +31,13 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Member getById(long memberId) {
+        return memberJpaRepository.findById(memberId)
+                .map(memberEntity -> memberEntity.toModel())
+                .orElseThrow(() -> new MemberException(com.example.samplesns.member.exception.status.MemberStatus.NOT_EXIST_MEMBER));
+    }
+
+    @Override
     public Optional<Member> findById(long memberId) {
         return memberJpaRepository.findById(memberId)
                 .map(memberEntity -> memberEntity.toModel());

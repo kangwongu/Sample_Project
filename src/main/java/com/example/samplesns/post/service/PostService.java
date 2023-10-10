@@ -1,5 +1,6 @@
 package com.example.samplesns.post.service;
 
+import com.example.samplesns.follow.service.port.FollowRepository;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.service.port.MemberRepository;
 import com.example.samplesns.post.domain.Post;
@@ -7,24 +8,36 @@ import com.example.samplesns.post.dto.*;
 import com.example.samplesns.post.exception.PostException;
 import com.example.samplesns.post.exception.status.PostStatus;
 import com.example.samplesns.post.service.port.PostRepository;
+import com.example.samplesns.timeline.service.TimelineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
 
+    private final TimelineService timelineService;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final FollowRepository followRepository;
 
     @Transactional
     public void createPost(Member member, PostCreateRequest request) {
         Post post = Post.from(member, request.getTitle(), request.getContents());
-        postRepository.save(post);
+        post = postRepository.save(post);
+        List<Long> followerIds = followRepository.findAllByToMemberId(member.getId())
+                .stream()
+                .map(f -> f.getFromMember().getId())
+                .collect(Collectors.toList());
+
+        timelineService.deliveryTimeline(post.getId(), followerIds);
     }
 
     public Slice<DailyPostResponse> getDailyPosts(Member member, DailyPostRequest request, Pageable pageable) {

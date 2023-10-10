@@ -20,7 +20,7 @@ import java.util.List;
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostJpaRepository postJpaRepository;
-    private final JdbcTemplate jdbcTemplate;
+//    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Post save(Post post) {
@@ -35,6 +35,12 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Slice<Post> findAllByIds(List<Long> postIds, Pageable pageable) {
+        return postJpaRepository.findAllByIdIn(postIds, pageable)
+                .map(postEntity -> postEntity.toModel());
+    }
+
+    @Override
     public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
         return postJpaRepository.groupByCreateDate(memberId, Date.valueOf(firstDate), Date.valueOf(lastDate), pageable);
     }
@@ -45,11 +51,11 @@ public class PostRepositoryImpl implements PostRepository {
                 .map(postEntity -> postEntity.toModel());
     }
 
-    @Override
-    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
-        return postJpaRepository.findAllByMemberIdInOrderByCreateDateDesc(memberIds, pageable)
-                .map(postEntity -> postEntity.toModel());
-    }
+//    @Override
+//    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
+//        return postJpaRepository.findAllByMemberIdInOrderByCreateDateDesc(memberIds, pageable)
+//                .map(postEntity -> postEntity.toModel());
+//    }
 
 //    @Override
 //    public void saveAllByBulk(long memberId, List<Post> posts) {
