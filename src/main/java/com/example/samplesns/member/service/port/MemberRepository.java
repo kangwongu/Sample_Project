@@ -11,6 +11,8 @@ public interface MemberRepository {
 
     Member getByEmail(String email);
 
+    Member getById(long memberId);
+
     Optional<Member> findById(long memberId);
 
     Member save(Member member);

@@ -14,9 +14,13 @@ public interface PostRepository {
 
     Post getById(long postId);
 
+    Slice<Post> findAllByIds(List<Long> postIds, Pageable pageable);
+
     Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable);
 
     Slice<Post> getMemberPosts(long memberId, Pageable pageable);
+
+//    Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable);
 
 //    void saveAllByBulk(long memberId, List<Post> posts);
 }

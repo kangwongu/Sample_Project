@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostJpaRepository postJpaRepository;
-    private final JdbcTemplate jdbcTemplate;
+//    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Post save(Post post) {
@@ -34,6 +35,12 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Slice<Post> findAllByIds(List<Long> postIds, Pageable pageable) {
+        return postJpaRepository.findAllByIdIn(postIds, pageable)
+                .map(postEntity -> postEntity.toModel());
+    }
+
+    @Override
     public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
         return postJpaRepository.groupByCreateDate(memberId, Date.valueOf(firstDate), Date.valueOf(lastDate), pageable);
     }
@@ -43,6 +50,12 @@ public class PostRepositoryImpl implements PostRepository {
         return postJpaRepository.findAllByMemberIdOrderByCreateDateDesc(memberId, pageable)
                 .map(postEntity -> postEntity.toModel());
     }
+
+//    @Override
+//    public Slice<Post> getTimelines(List<Long> memberIds, Pageable pageable) {
+//        return postJpaRepository.findAllByMemberIdInOrderByCreateDateDesc(memberIds, pageable)
+//                .map(postEntity -> postEntity.toModel());
+//    }
 
 //    @Override
 //    public void saveAllByBulk(long memberId, List<Post> posts) {

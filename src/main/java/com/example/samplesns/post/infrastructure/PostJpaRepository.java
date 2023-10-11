@@ -8,8 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.util.List;
 
 public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
+
+    @Query("select p from PostEntity p " +
+            "where p.id in :postIds")
+    Slice<PostEntity> findAllByIdIn(@Param("postIds") List<Long> postIds,
+                              Pageable pageable);
 
     @Query("select new com.example.samplesns.post.dto.DailyPostResponse(p.member.email, p.member.nickname, DATE(p.createDate), count(p.id)) " +
                 "from PostEntity p " +
@@ -22,5 +28,7 @@ public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
                                                Pageable pageable);
 
     Slice<PostEntity> findAllByMemberIdOrderByCreateDateDesc(long memberId, Pageable pageable);
+
+    Slice<PostEntity> findAllByMemberIdInOrderByCreateDateDesc(List<Long> memberIds, Pageable pageable);
 
 }
