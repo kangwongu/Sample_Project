@@ -11,6 +11,8 @@ import com.example.samplesns.member.service.port.MemberRepository;
 import com.example.samplesns.member.service.port.MyPasswordEncoder;
 import com.example.samplesns.post.service.PostService;
 import com.example.samplesns.post.service.port.PostRepository;
+import com.example.samplesns.timeline.service.TimelineService;
+import com.example.samplesns.timeline.service.port.TimelineRepository;
 import lombok.Builder;
 
 public class TestContainer {
@@ -24,6 +26,8 @@ public class TestContainer {
     public FollowRepository followRepository;
     public PostService postService;
     public PostRepository postRepository;
+    public TimelineService timelineService;
+    public TimelineRepository timelineRepository;
 
 
     @Builder
@@ -36,7 +40,9 @@ public class TestContainer {
         this.followRepository = new FakeFollowRepository();
         this.followService = new FollowService(memberRepository, followRepository);
         this.postRepository = new FakePostRepository();
-        this.postService = new PostService(postRepository, memberRepository);
+        this.timelineRepository = new FakeTimelineRepository();
+        this.timelineService = new TimelineService(postRepository, memberRepository, timelineRepository);
+        this.postService = new PostService(timelineService, postRepository, memberRepository, followRepository);
     }
 
 }
