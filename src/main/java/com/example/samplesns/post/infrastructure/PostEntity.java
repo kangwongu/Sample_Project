@@ -30,6 +30,9 @@ public class PostEntity extends Timestamp {
     @Convert(converter = BooleanToYNConverter.class)
     private Boolean isDelete;
 
+    @Version
+    private Long version;
+
     public static PostEntity from(Post post) {
         PostEntity postEntity = new PostEntity();
         postEntity.id = post.getId();
@@ -38,6 +41,7 @@ public class PostEntity extends Timestamp {
         postEntity.contents = post.getContents();
         postEntity.likeCount = post.getLikeCount();
         postEntity.isDelete = post.getIsDelete();
+        postEntity.version = post.getVersion();
 
         return postEntity;
     }
@@ -50,6 +54,7 @@ public class PostEntity extends Timestamp {
                 .contents(contents)
                 .likeCount(likeCount)
                 .isDelete(isDelete)
+                .version(version)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();

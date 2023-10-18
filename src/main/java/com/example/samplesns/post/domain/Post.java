@@ -18,17 +18,19 @@ public class Post {
     private final String contents;
     private final Long likeCount;
     private final Boolean isDelete;
+    private final Long version;
     private final LocalDateTime createDate;
     private final LocalDateTime modifyDate;
 
     @Builder
-    public Post(Long id, Member member, String title, String contents, Long likeCount, Boolean isDelete, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public Post(Long id, Member member, String title, String contents, Long likeCount, Boolean isDelete, Long version, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.id = id;
         this.member = Objects.requireNonNull(member);
         this.title = Objects.requireNonNull(title);
         this.contents = Objects.requireNonNull(contents);
         this.likeCount = likeCount == null ? 0 : likeCount;
         this.isDelete = Objects.requireNonNull(isDelete);
+        this.version = version == null ? 0 : version;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
     }
@@ -38,7 +40,9 @@ public class Post {
                 .member(fromMember)
                 .title(title)
                 .contents(contents)
+                .likeCount(0L)
                 .isDelete(false)
+                .version(0L)
                 .createDate(LocalDateTime.now())
                 .modifyDate(LocalDateTime.now())
                 .build();
@@ -56,6 +60,7 @@ public class Post {
                 .contents(contents)
                 .likeCount(likeCount)
                 .isDelete(isDelete)
+                .version(version)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();
@@ -73,6 +78,7 @@ public class Post {
                 .contents(contents)
                 .likeCount(likeCount)
                 .isDelete(true)
+                .version(version)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();
@@ -86,6 +92,7 @@ public class Post {
                 .contents(contents)
                 .likeCount(likeCount+1)
                 .isDelete(isDelete)
+                .version(version)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();

@@ -34,6 +34,6 @@ public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
 
     Slice<PostEntity> findAllByMemberIdInOrderByCreateDateDesc(List<Long> memberIds, Pageable pageable);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.OPTIMISTIC)
     Optional<PostEntity> findById(long postId);
 }
