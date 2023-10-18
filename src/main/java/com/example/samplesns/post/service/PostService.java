@@ -77,4 +77,11 @@ public class PostService {
         Post deletePost = findPost.delete();
         postRepository.save(deletePost);
     }
+
+    @Transactional
+    public void likePost(Long postId) {
+        Post post = postRepository.getById(postId);
+        post = post.incrementLikeCount();
+        postRepository.save(post);
+    }
 }

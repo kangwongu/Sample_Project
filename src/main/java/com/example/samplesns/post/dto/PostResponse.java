@@ -12,6 +12,7 @@ public class PostResponse {
     private String contents;
     private String email;
     private String nickname;
+    private Long likeCount;
     private LocalDateTime createDate;
 
     public static PostResponse from(Post p) {
@@ -20,6 +21,7 @@ public class PostResponse {
         response.setContents(p.getContents());
         response.setEmail(p.getMember().getEmail());
         response.setNickname(p.getMember().getNickname());
+        response.setLikeCount(p.getLikeCount());
         response.setCreateDate(p.getCreateDate());
 
         return response;

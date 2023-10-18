@@ -16,16 +16,18 @@ public class Post {
     private final Member member;
     private final String title;
     private final String contents;
+    private final Long likeCount;
     private final Boolean isDelete;
     private final LocalDateTime createDate;
     private final LocalDateTime modifyDate;
 
     @Builder
-    public Post(Long id, Member member, String title, String contents, Boolean isDelete, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public Post(Long id, Member member, String title, String contents, Long likeCount, Boolean isDelete, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.id = id;
         this.member = Objects.requireNonNull(member);
         this.title = Objects.requireNonNull(title);
         this.contents = Objects.requireNonNull(contents);
+        this.likeCount = likeCount == null ? 0 : likeCount;
         this.isDelete = Objects.requireNonNull(isDelete);
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -52,6 +54,7 @@ public class Post {
                 .member(member)
                 .title(title)
                 .contents(contents)
+                .likeCount(likeCount)
                 .isDelete(isDelete)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
@@ -68,7 +71,21 @@ public class Post {
                 .member(member)
                 .title(title)
                 .contents(contents)
+                .likeCount(likeCount)
                 .isDelete(true)
+                .createDate(getCreateDate())
+                .modifyDate(getModifyDate())
+                .build();
+    }
+
+    public Post incrementLikeCount() {
+        return Post.builder()
+                .id(id)
+                .member(member)
+                .title(title)
+                .contents(contents)
+                .likeCount(likeCount+1)
+                .isDelete(isDelete)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
                 .build();

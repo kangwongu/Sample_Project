@@ -25,6 +25,8 @@ public class PostEntity extends Timestamp {
 
     private String contents;
 
+    private Long likeCount;
+
     @Convert(converter = BooleanToYNConverter.class)
     private Boolean isDelete;
 
@@ -34,6 +36,7 @@ public class PostEntity extends Timestamp {
         postEntity.member = MemberEntity.from(post.getMember());
         postEntity.title = post.getTitle();
         postEntity.contents = post.getContents();
+        postEntity.likeCount = post.getLikeCount();
         postEntity.isDelete = post.getIsDelete();
 
         return postEntity;
@@ -45,6 +48,7 @@ public class PostEntity extends Timestamp {
                 .member(member.toModel())
                 .title(title)
                 .contents(contents)
+                .likeCount(likeCount)
                 .isDelete(isDelete)
                 .createDate(getCreateDate())
                 .modifyDate(getModifyDate())
