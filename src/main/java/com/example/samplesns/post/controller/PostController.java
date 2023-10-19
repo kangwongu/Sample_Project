@@ -137,10 +137,10 @@ public class PostController {
 //        return ResponseEntity.ok().body(response);
 //    }
 
-    @PostMapping("/{postId}/like")
-    public ResponseEntity<Void> likePost(@PathVariable Long postId) {
-        postService.likePost(postId);
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/{postId}/like")
+//    public ResponseEntity<Void> likePost(@PathVariable Long postId) {
+//        postService.likePost(postId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 }
