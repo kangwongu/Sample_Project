@@ -1,10 +1,10 @@
 package com.example.samplesns.timeline.service;
 
-import com.example.samplesns.follow.service.port.FollowRepository;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.service.port.MemberRepository;
 import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.PostResponse;
+import com.example.samplesns.post.service.port.PostLikeRepository;
 import com.example.samplesns.post.service.port.PostRepository;
 import com.example.samplesns.timeline.domain.Timeline;
 import com.example.samplesns.timeline.service.port.TimelineRepository;
@@ -25,6 +25,7 @@ public class TimelineService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final TimelineRepository timelineRepository;
+    private final PostLikeRepository postLikeRepository;
 
     // pull model
 //    public Slice<PostResponse> getTimelinesByPullModel(Member member, Pageable pageable) {
@@ -43,7 +44,7 @@ public class TimelineService {
                 .map(t -> t.getPost().getId())
                 .collect(Collectors.toList());
         return postRepository.findAllByIds(postIds, pageable)
-                .map(post -> PostResponse.from(post));
+                .map(post -> PostResponse.of(post, postLikeRepository.count(post.getId())));
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.*;
 import com.example.samplesns.post.exception.PostException;
 import com.example.samplesns.post.exception.status.PostStatus;
+import com.example.samplesns.post.service.port.PostLikeRepository;
 import com.example.samplesns.post.service.port.PostRepository;
 import com.example.samplesns.timeline.service.TimelineService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public void createPost(Member member, PostCreateRequest request) {
@@ -45,13 +47,13 @@ public class PostService {
     }
 
     public Slice<PostResponse> getMyPosts(Member member, Pageable pageable) {
-        return postRepository.getMemberPosts(member.getId(), pageable).map(p -> PostResponse.from(p));
+        return postRepository.getMemberPosts(member.getId(), pageable).map(p -> PostResponse.of(p, postLikeRepository.count(p.getId())));
     }
 
     public Slice<PostResponse> getPosts(String email, Pageable pageable) {
         Member findMember = memberRepository.getByEmail(email);
 
-        return postRepository.getMemberPosts(findMember.getId(), pageable).map(p -> PostResponse.from(p));
+        return postRepository.getMemberPosts(findMember.getId(), pageable).map(p -> PostResponse.of(p, postLikeRepository.count(p.getId())));
     }
 
     @Transactional
@@ -77,4 +79,11 @@ public class PostService {
         Post deletePost = findPost.delete();
         postRepository.save(deletePost);
     }
+
+//    @Transactional
+//    public void likePost(Long postId) {
+//        Post post = postRepository.getById(postId);
+//        post = post.incrementLikeCount();
+//        postRepository.save(post);
+//    }
 }
