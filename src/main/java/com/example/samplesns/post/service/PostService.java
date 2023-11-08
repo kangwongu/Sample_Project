@@ -16,6 +16,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class PostService {
     }
 
     public Slice<DailyPostResponse> getDailyPosts(Member member, DailyPostRequest request, Pageable pageable) {
-        return postRepository.groupByCreateDate(member.getId(), request.getFirstDate(), request.getLastDate(), pageable);
+        return postRepository.groupByCreateDate(member.getId(), Date.valueOf(request.getFirstDate()), Date.valueOf(request.getLastDate()), pageable);
     }
 
     public Slice<PostResponse> getMyPosts(Member member, Pageable pageable) {

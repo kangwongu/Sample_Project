@@ -47,7 +47,7 @@ public class TestContainer {
 
         this.memberService = new MemberService(passwordService, certificationService, memberRepository, jwtManager);
         this.followService = new FollowService(memberRepository, followRepository);
-        this.timelineService = new TimelineService(postRepository, memberRepository, timelineRepository);
+        this.timelineService = new TimelineService(postRepository, memberRepository, timelineRepository, postLikeRepository);
         this.postService = new PostService(timelineService, postRepository, memberRepository, followRepository, postLikeRepository);
         this.postLikeService = new PostLikeService(postRepository, postLikeRepository);
     }
