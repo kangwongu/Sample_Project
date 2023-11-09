@@ -2,7 +2,7 @@ package com.example.samplesns.timeline.controller;
 
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
 import com.example.samplesns.post.dto.PostResponse;
-import com.example.samplesns.timeline.service.TimelineService;
+import com.example.samplesns.timeline.service.TimelineServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/timeline")
 public class TimelineController {
-    private final TimelineService timelineService;
+    private final TimelineServiceImpl timelineService;
 
     @GetMapping("")
     @Operation(summary = "타임라인(홈) 조회", description = "자신이 팔로우한 회원들의 게시글 시간순 조회")

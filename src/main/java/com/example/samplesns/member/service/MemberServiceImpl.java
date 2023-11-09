@@ -1,8 +1,8 @@
 package com.example.samplesns.member.service;
 
-import com.example.samplesns.common.infrastructure.jwt.SystemJwtManager;
 import com.example.samplesns.common.service.port.JwtManager;
 import com.example.samplesns.common.util.RandomCodeCreator;
+import com.example.samplesns.member.controller.port.MemberService;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.dto.LoginRequest;
 import com.example.samplesns.member.dto.RegisterRequest;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberServiceImpl implements MemberService {
 
     private final PasswordService passwordService;
     private final CertificationService certificationService;
@@ -28,6 +28,7 @@ public class MemberService {
 
     // 회원가입
     @Transactional
+    @Override
     public Member register(RegisterRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new MemberException(MemberStatus.DUPLICATED_MEMBER);
@@ -47,6 +48,7 @@ public class MemberService {
 
     // 인증
     @Transactional
+    @Override
     public void verifyEmail(long memberId, String certificationCode) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
@@ -57,6 +59,7 @@ public class MemberService {
     }
 
     // 로그인
+    @Override
     public HttpHeaders login(LoginRequest request) {
         Member member = memberRepository.findByEmailAndStatus(request.getEmail(), com.example.samplesns.member.domain.MemberStatus.ACTIVE)
                 .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
