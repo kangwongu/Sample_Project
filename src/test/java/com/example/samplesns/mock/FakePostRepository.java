@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +54,7 @@ public class FakePostRepository implements PostRepository {
     }
 
     @Override
-    public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
+    public Slice<DailyPostResponse> groupByCreateDate(long memberId, Date firstDate, Date lastDate, Pageable pageable) {
         return null;
     }
 

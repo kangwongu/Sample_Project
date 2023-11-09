@@ -5,15 +5,20 @@ import com.example.samplesns.post.dto.DailyPostResponse;
 import com.example.samplesns.post.exception.PostException;
 import com.example.samplesns.post.exception.status.PostStatus;
 import com.example.samplesns.post.service.port.PostRepository;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.DateTemplate;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
+
+import static com.example.samplesns.post.infrastructure.QPostEntity.postEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     private final PostJpaRepository postJpaRepository;
 //    private final JdbcTemplate jdbcTemplate;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public Post save(Post post) {
@@ -40,9 +46,35 @@ public class PostRepositoryImpl implements PostRepository {
                 .map(postEntity -> postEntity.toModel());
     }
 
+//    @Override
+//    public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
+//        return postJpaRepository.groupByCreateDate(memberId, Date.valueOf(firstDate), Date.valueOf(lastDate), pageable);
+//    }
+
     @Override
-    public Slice<DailyPostResponse> groupByCreateDate(long memberId, LocalDate firstDate, LocalDate lastDate, Pageable pageable) {
-        return postJpaRepository.groupByCreateDate(memberId, Date.valueOf(firstDate), Date.valueOf(lastDate), pageable);
+    public Slice<DailyPostResponse> groupByCreateDate(long memberId, Date firstDate, Date lastDate, Pageable pageable) {
+        DateTemplate<Date> dateTemplate = Expressions.dateTemplate(Date.class, "DATE({0})", postEntity.createDate);
+
+        List<DailyPostResponse> dailyPostResponses = jpaQueryFactory
+                .select(Projections.constructor(DailyPostResponse.class,
+                        postEntity.member.email, postEntity.member.nickname, dateTemplate, postEntity.count()))
+                .from(postEntity)
+                .where(
+                        postEntity.member.id.eq(memberId),
+                        dateTemplate.between(firstDate, lastDate)
+                )
+                .groupBy(postEntity.member.email, postEntity.member.nickname, dateTemplate)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (dailyPostResponses.size() > pageable.getPageSize()) {
+            dailyPostResponses.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(dailyPostResponses, pageable, hasNext);
     }
 
     @Override

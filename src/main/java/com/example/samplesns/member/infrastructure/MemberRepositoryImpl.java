@@ -4,6 +4,7 @@ import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.domain.MemberStatus;
 import com.example.samplesns.member.exception.MemberException;
 import com.example.samplesns.member.service.port.MemberRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class MemberRepositoryImpl implements MemberRepository {
 
     private final MemberJpaRepository memberJpaRepository;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public Optional<Member> findByEmail(String email) {
