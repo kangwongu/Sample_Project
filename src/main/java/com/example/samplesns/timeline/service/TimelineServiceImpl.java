@@ -6,6 +6,7 @@ import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.PostResponse;
 import com.example.samplesns.post.service.port.PostLikeRepository;
 import com.example.samplesns.post.service.port.PostRepository;
+import com.example.samplesns.timeline.controller.port.TimelineService;
 import com.example.samplesns.timeline.domain.Timeline;
 import com.example.samplesns.timeline.service.port.TimelineRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TimelineService {
+public class TimelineServiceImpl implements TimelineService {
 
 //    private final FollowRepository followRepository;
     private final PostRepository postRepository;
@@ -38,6 +39,7 @@ public class TimelineService {
 //    }
 
     // push model
+    @Override
     public Slice<PostResponse> getTimelinesByPushModel(Member member, Pageable pageable) {
         Slice<Timeline> timelines = timelineRepository.getTimelines(member.getId(), pageable);
         List<Long> postIds = timelines.getContent().stream()
@@ -48,6 +50,7 @@ public class TimelineService {
     }
 
     @Transactional
+    @Override
     public void deliveryTimeline(long postId, List<Long> toMemberIds) {
         Post post = postRepository.getById(postId);
         List<Timeline> timelines = toMemberIds.stream()

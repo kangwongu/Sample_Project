@@ -2,8 +2,8 @@ package com.example.samplesns.follow.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
+import com.example.samplesns.follow.controller.port.FollowService;
 import com.example.samplesns.follow.dto.FollowRequest;
-import com.example.samplesns.follow.service.FollowService;
 import com.example.samplesns.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

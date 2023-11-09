@@ -3,13 +3,14 @@ package com.example.samplesns.post.service;
 import com.example.samplesns.follow.service.port.FollowRepository;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.service.port.MemberRepository;
+import com.example.samplesns.post.controller.port.PostService;
 import com.example.samplesns.post.domain.Post;
 import com.example.samplesns.post.dto.*;
 import com.example.samplesns.post.exception.PostException;
 import com.example.samplesns.post.exception.status.PostStatus;
 import com.example.samplesns.post.service.port.PostLikeRepository;
 import com.example.samplesns.post.service.port.PostRepository;
-import com.example.samplesns.timeline.service.TimelineService;
+import com.example.samplesns.timeline.controller.port.TimelineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PostService {
+public class PostServiceImpl implements PostService {
 
     private final TimelineService timelineService;
     private final PostRepository postRepository;
@@ -32,6 +33,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
 
     @Transactional
+    @Override
     public void createPost(Member member, PostCreateRequest request) {
         Post post = Post.from(member, request.getTitle(), request.getContents());
         post = postRepository.save(post);
@@ -43,14 +45,17 @@ public class PostService {
         timelineService.deliveryTimeline(post.getId(), followerIds);
     }
 
+    @Override
     public Slice<DailyPostResponse> getDailyPosts(Member member, DailyPostRequest request, Pageable pageable) {
         return postRepository.groupByCreateDate(member.getId(), Date.valueOf(request.getFirstDate()), Date.valueOf(request.getLastDate()), pageable);
     }
 
+    @Override
     public Slice<PostResponse> getMyPosts(Member member, Pageable pageable) {
         return postRepository.getMemberPosts(member.getId(), pageable).map(p -> PostResponse.of(p, postLikeRepository.count(p.getId())));
     }
 
+    @Override
     public Slice<PostResponse> getPosts(String email, Pageable pageable) {
         Member findMember = memberRepository.getByEmail(email);
 
@@ -58,6 +63,7 @@ public class PostService {
     }
 
     @Transactional
+    @Override
     public void updatePost(long postId, Member member, PostUpdateRequest request) {
         Post findPost = postRepository.getById(postId);
 
@@ -70,6 +76,7 @@ public class PostService {
     }
 
     @Transactional
+    @Override
     public void deletePost(long postId, Member member) {
         Post findPost = postRepository.getById(postId);
 

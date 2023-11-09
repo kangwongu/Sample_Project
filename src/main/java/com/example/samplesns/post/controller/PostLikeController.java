@@ -1,7 +1,7 @@
 package com.example.samplesns.post.controller;
 
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
-import com.example.samplesns.post.service.PostLikeService;
+import com.example.samplesns.post.controller.port.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

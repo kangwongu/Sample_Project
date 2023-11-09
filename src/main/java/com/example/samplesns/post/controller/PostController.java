@@ -2,8 +2,8 @@ package com.example.samplesns.post.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
 import com.example.samplesns.common.security.userdetails.UserDetailsImpl;
+import com.example.samplesns.post.controller.port.PostService;
 import com.example.samplesns.post.dto.*;
-import com.example.samplesns.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

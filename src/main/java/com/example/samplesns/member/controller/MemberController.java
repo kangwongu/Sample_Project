@@ -1,10 +1,10 @@
 package com.example.samplesns.member.controller;
 
 import com.example.samplesns.common.exception.response.ExceptionResponse;
+import com.example.samplesns.member.controller.port.MemberService;
 import com.example.samplesns.member.domain.Member;
 import com.example.samplesns.member.dto.LoginRequest;
 import com.example.samplesns.member.dto.RegisterRequest;
-import com.example.samplesns.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,5 +1,6 @@
 package com.example.samplesns.follow.service;
 
+import com.example.samplesns.follow.controller.port.FollowService;
 import com.example.samplesns.follow.domain.Follow;
 import com.example.samplesns.follow.dto.FollowRequest;
 import com.example.samplesns.follow.service.port.FollowRepository;
@@ -17,12 +18,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FollowService {
+public class FollowServiceImpl implements FollowService {
 
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
     @Transactional
+    @Override
     public void follow(Member fromMember, FollowRequest request) {
         Member toMember = memberRepository.findByEmailAndStatus(request.getEmail(), com.example.samplesns.member.domain.MemberStatus.ACTIVE)
                 .orElseThrow(() -> new MemberException(MemberStatus.NOT_EXIST_MEMBER));
@@ -31,6 +33,7 @@ public class FollowService {
         followRepository.save(follow);
     }
 
+    @Override
     public List<MemberResponse> getFollowingMembers(Member fromMember) {
         List<Follow> follows = followRepository.findAllByfromMemberId(fromMember.getId());
         List<Long> followingMemberIds = follows.stream()
